@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Notifications</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li class="active"><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <h3>Notifications</h3>
+
+        <div th:if="${#lists.isEmpty(notifications)}">
+            <p>No new notifications.</p>
+        </div>
+
+        <ul class="notification-list" th:if="${!#lists.isEmpty(notifications)}">
+            <li th:each="n : ${notifications}">
+                <span th:text="${n.message}"></span>
+                <small th:text="${n.date}"></small>
+                <form th:action="@{'/notifications/read/' + ${n.id}}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm">Mark as read</button>
+                </form>
+            </li>
+        </ul>
+    </section>
+</div>
+</body>
+</html>

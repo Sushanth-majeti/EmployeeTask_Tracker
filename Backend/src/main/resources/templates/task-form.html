@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${task.id == null} ? 'Create Task' : 'Edit Task'">Task</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li class="active"><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <h3 th:text="${task.id == null} ? 'Create Task' : 'Edit Task'"></h3>
+
+        <form th:action="@{/tasks/save}" method="post" class="form">
+            <input type="hidden" name="id" th:value="${task.id}"/>
+
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" th:value="${task.title}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="4"
+                          th:text="${task.description}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Assign To</label>
+                <select name="assignedToId">
+                    <option value="">-- Unassigned --</option>
+                    <option th:each="emp : ${employees}"
+                            th:value="${emp.id}"
+                            th:text="${emp.fullName}"
+                            th:selected="${task.assignedTo != null and emp.id == task.assignedTo.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="dueDate"
+                       th:value="${task.dueDate}">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" th:value="${task.status}">
+                    <option value="Pending" th:selected="${task.status == 'Pending'}">Pending</option>
+                    <option value="In Progress" th:selected="${task.status == 'In Progress'}">In Progress</option>
+                    <option value="Completed" th:selected="${task.status == 'Completed'}">Completed</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/tasks}" class="btn">Cancel</a>
+        </form>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>My Tasks</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li class="active"><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <h3>My Tasks</h3>
+
+        <div th:if="${#lists.isEmpty(tasks)}">
+            <p>You have no tasks assigned.</p>
+        </div>
+
+        <table class="main-table" th:if="${!#lists.isEmpty(tasks)}">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Status</th>
+            </tr>
+            <tr th:each="t, iStat : ${tasks}">
+                <td th:text="${iStat.index + 1}"></td>
+                <td th:text="${t.title}"></td>
+                <td th:text="${t.description}"></td>
+                <td th:text="${t.dueDate} == null ? 'No Deadline' : t.dueDate"></td>
+                <td th:text="${t.status}"></td>
+            </tr>
+        </table>
+    </section>
+</div>
+</body>
+</html>

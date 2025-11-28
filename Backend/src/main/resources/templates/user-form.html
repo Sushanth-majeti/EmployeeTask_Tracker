@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${userForm.id == null} ? 'Add Employee' : 'Edit Employee'">Employee</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <h3 th:text="${userForm.id == null} ? 'Add Employee' : 'Edit Employee'"></h3>
+
+        <form th:action="@{/users/save}" method="post" class="form">
+            <input type="hidden" name="id" th:value="${userForm.id}"/>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" th:value="${userForm.fullName}" required>
+            </div>
+
+            <div class="form-group">
+                <label>User Name</label>
+                <input type="text" name="user_name" th:value="${userForm.userName}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="text" name="password" th:value="${userForm.password}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role">
+                    <option value="admin" th:selected="${userForm.role == 'admin'}">Admin</option>
+                    <option value="employee" th:selected="${userForm.role == 'employee'}">Employee</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/users}" class="btn">Cancel</a>
+        </form>
+    </section>
+</div>
+</body>
+</html>

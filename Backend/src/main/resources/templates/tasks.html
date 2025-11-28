@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>All Tasks</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li th:if="${user != null and user.role == 'admin'}">
+                <a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a>
+            </li>
+            <li th:if="${user != null and user.role == 'admin'}" class="active">
+                <a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a>
+            </li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <h4 class="title-2">
+            <a th:href="@{/tasks/new}" class="btn">Create Task</a>
+            <a th:href="@{/tasks(due_date='Due Today')}">Due Today</a>
+            <a th:href="@{/tasks(due_date='Overdue')}">Overdue</a>
+            <a th:href="@{/tasks(due_date='No Deadline')}">No Deadline</a>
+            <a th:href="@{/tasks}">All Tasks</a>
+        </h4>
+
+        <h4 class="title-2"
+            th:text="${filterText + ' (' + numTasks + ')'}">
+            All Task (0)
+        </h4>
+
+        <div th:if="${param.success}" class="success" role="alert"
+             th:text="${param.success}">
+            Success message
+        </div>
+
+        <table class="main-table" th:if="${tasks != null and !#lists.isEmpty(tasks)}">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            <tr th:each="task, iStat : ${tasks}">
+                <td th:text="${iStat.index + 1}">1</td>
+                <td th:text="${task.title}">Task title</td>
+                <td th:text="${task.description}">Task description</td>
+                <td th:text="${task.assignedTo != null ? task.assignedTo.fullName : ''}">
+                    Employee Name
+                </td>
+                <td th:text="${task.dueDate} == null ? 'No Deadline' : task.dueDate">
+                    2025-01-01
+                </td>
+                <td th:text="${task.status}">Pending</td>
+                <td>
+                    <a th:href="@{'/tasks/edit/' + ${task.id}}"
+                       class="edit-btn">Edit</a>
+                    <a th:href="@{'/tasks/delete/' + ${task.id}}"
+                       class="delete-btn"
+                       onclick="return confirm('Delete this task?');">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <h3 th:if="${tasks == null or #lists.isEmpty(tasks)}">Empty</h3>
+    </section>
+</div>
+
+<script type="text/javascript">
+    var active = document.querySelector("#navList li:nth-child(3)");
+    if (active) {
+        active.classList.add("active");
+    }
+</script>
+</body>
+</html>

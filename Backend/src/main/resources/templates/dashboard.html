@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard | Task Management System</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li class="active"><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li th:if="${user.role == 'admin'}"><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <div th:if="${user.role == 'admin'}">
+            <div class="dashboard-grid">
+                <div class="dashboard-item">
+                    <i class="fa fa-users"></i>
+                    <p th:text="${numUsers + ' Employees'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-tasks"></i>
+                    <p th:text="${numTasks + ' All Tasks'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-window-close-o"></i>
+                    <p th:text="${overdue + ' Overdue'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-clock-o"></i>
+                    <p th:text="${noDeadline + ' No Deadline'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <p th:text="${dueToday + ' Due Today'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-square-o"></i>
+                    <p th:text="${pending + ' Pending'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-spinner"></i>
+                    <p th:text="${inProgress + ' In Progress'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-check-square"></i>
+                    <p th:text="${completed + ' Completed'}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${user.role != 'admin'}">
+            <div class="dashboard-grid">
+                <div class="dashboard-item">
+                    <i class="fa fa-tasks"></i>
+                    <p th:text="${numMyTasks + ' My Tasks'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-window-close-o"></i>
+                    <p th:text="${overdue + ' Overdue'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-clock-o"></i>
+                    <p th:text="${noDeadline + ' No Deadline'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <p th:text="${dueToday + ' Due Today'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-square-o"></i>
+                    <p th:text="${pending + ' Pending'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-spinner"></i>
+                    <p th:text="${inProgress + ' In Progress'}"></p>
+                </div>
+                <div class="dashboard-item">
+                    <i class="fa fa-check-square"></i>
+                    <p th:text="${completed + ' Completed'}"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

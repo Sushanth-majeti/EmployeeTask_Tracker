@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Employees</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<input type="checkbox" id="checkbox">
+
+<header class="header">
+    <div class="logo">
+        <h2>Task Management System</h2>
+    </div>
+    <div class="user-info" th:if="${user != null}">
+        <span th:text="${user.fullName}">User Name</span>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</header>
+
+<div class="body">
+    <nav class="sidebar">
+        <ul id="navList">
+            <li><a th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><a th:href="@{/users}"><i class="fa fa-users"></i> Employees</a></li>
+            <li><a th:href="@{/tasks}"><i class="fa fa-tasks"></i> All Tasks</a></li>
+            <li><a th:href="@{/my-tasks}"><i class="fa fa-check-square-o"></i> My Tasks</a></li>
+            <li><a th:href="@{/notifications}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-1">
+        <div class="section-header">
+            <h3>Employees</h3>
+            <a th:href="@{/users/new}" class="btn btn-primary btn-sm">Add Employee</a>
+        </div>
+
+        <div th:if="${param.success}" class="success" th:text="${param.success}"></div>
+
+        <div th:if="${#lists.isEmpty(users)}">
+            <p>No employees found.</p>
+        </div>
+
+        <table class="main-table" th:if="${!#lists.isEmpty(users)}">
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>User Name</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="u, iStat : ${users}">
+                <td th:text="${iStat.index + 1}"></td>
+                <td th:text="${u.fullName}"></td>
+                <td th:text="${u.userName}"></td>
+                <td th:text="${u.role}"></td>
+                <td>
+                    <a th:href="@{'/users/edit/' + ${u.id}}">Edit</a> |
+                    <a th:href="@{'/users/delete/' + ${u.id}}"
+                       onclick="return confirm('Delete this user?');">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </section>
+</div>
+</body>
+</html>
